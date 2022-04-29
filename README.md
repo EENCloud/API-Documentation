@@ -16,15 +16,9 @@
 
 [QR Detection](./EE-manufacturing-detection)
 
-Detecting QR codes in a manufacturing environment
-
-
 [QR Detection web app](./EE-manufacturing-web)
 
 [Monitor](./EE-monitor)
-
-Quick monitor tool using the Eagle Eye Networks API.
-
 
 [Paleo](./EE-paleo)
 
