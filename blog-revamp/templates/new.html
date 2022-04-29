@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block container %}
+<section class="maincontent-wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="maincotnent shadow-z-1">
+                            <div class="mainmenu">
+                                <div class="navbar navbar-nobg">
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="navbar-collapse collapse"> 
+                                        <ul class="nav navbar-nav">
+                                            <li class="active"><a href="/">Home <div class="ripple-wrapper"></div></a></li>
+                                            <li><a href="/blog/programming">Programming</a></li>
+                                            <li><a href="/blog/work">Work</a></li>
+                                            <li><a href="/blog/photography">Photography</a></li>
+                                            <li><a href="/blog/contact">Contact</a></li>
+                                            {% if admin %}
+                                              <li><a href="/new">New</a></li>
+                                            {% endif %}
+                                        </ul>                                                 
+                                    </div> 
+
+                                </div> 
+                            </div> 
+                            
+
+                            
+        {% if admin %}
+          <hr>
+            <div class="row">
+              <div class="col-md-10 col-md-offset-1">
+                  <div class="article-list">
+                      <article class="post">
+                          <div class="post-summary">
+                              <form id="comment_form" action="/blog/" method="post"> 
+                                  <h3>Post Something New</h3>
+                                  <p>
+                                    <input id="title" name="title" placeholder="Title" type="text" style="width: 100%"/>
+                                    <input id="category" placeholder="Category" name="category" type="text"  style="width: 100%"/>
+                                    <input id="category" placeholder="Author" name="author" type="text"  style="width: 100%"/>
+                                  </p>
+                                  <div id="entry-container"> 
+                                    <p>
+                                      <textarea id="content_img" placeholder="Content Image" name="content_img" rows="5" style="width: 100%"></textarea>
+                                    </p>
+                                  </div>
+                                  <div id="entry-container"> 
+                                    <p>
+                                      <input type="checkbox" name="show_teaser"/>Show Teaser?
+                                    </p>
+                                    <p>
+                                      <textarea id="teaser" placeholder="Teaser" name="teaser" rows="5" style="width: 100%"></textarea>
+                                    </p>
+                                  </div>
+                                  <div id="entry-container"> 
+                                    <p>
+                                      <textarea id="user_input" placeholder="Enter Markdown" name="user_input" rows="10" style="width: 100%"></textarea>
+                                    </p>
+                                  </div> 
+                                <div id="html_preview">
+                                <p>
+                                  <textarea id="textbody" placeholder="HTML Preview" name="html_body" rows="10" style="width: 100%" class="wikistyle"></textarea>
+                                </p>
+                              </div>
+                              <br>
+                              <!-- Add Comment Button -->
+                              <input type="submit" class="" name="Publish" value="Publish">
+                            </form>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+          {% else %}
+            <a href="{{ admin_url }}">{{ admin_url_text }}</a> 
+          {% endif %}
+        </section>
+{% endblock %}
+
+

@@ -1,0 +1,24 @@
+{
+  "name": "watcher",
+  "version": "0.0.1-13",
+  "description": "Watching the poll stream",
+  "main": "app.js",
+  "dependencies": {
+    "request": "~2.88.0",
+    "router": "~0.6.2",
+    "serialport": "^7.1.1",
+    "socket.io": "~0.9.14",
+    "underscore": "~1.4.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": "http://github.com/mcotton/watcher.git",
+  "author": "mcotton",
+  "license": "BSD",
+  "subdomain": "mcotton-watcher",
+  "engines": {
+    "node": "0.8.x"
+  }
+}

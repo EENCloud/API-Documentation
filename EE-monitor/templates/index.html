@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+@media only screen and (min-width : 1200px) {
+    .container { max-width: 1800px; }
+}
+</style>
+
+{% endblock %}
+
+{% block main %}
+
+
+<div class="container">
+
+    <h3>Select Cameras</h3>
+    <div class="row" style="padding-top: 5px; padding-bottom: 5px;">
+        <div class="col-xl-6">
+            <select>
+                <option value="">None</option>
+                {% for camera in template_values['cameras'] %}
+                    <option value="{{ camera[1] }}">{{ camera[0] }}</option>
+                {% endfor %}
+            </select>
+            <div style="width: 100%; height: 500px;">
+                <iframe src="" style="width: 100%; height:100%;"></iframe>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <select>
+                <option value="">None</option>
+                {% for camera in template_values['cameras'] %}
+                    <option value="{{ camera[1] }}">{{ camera[0] }}</option>
+                {% endfor %}
+            </select>
+            <div style="width: 100%; height: 500px">
+                <iframe src="" style="width: 100%; height:100%;"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 5px; padding-bottom: 5px;">
+        <div class="col-xl-6">
+            <select>
+                <option value="">None</option>
+                {% for camera in template_values['cameras'] %}
+                    <option value="{{ camera[1] }}">{{ camera[0] }}</option>
+                {% endfor %}
+            </select>
+            <div style="width: 100%; height: 500px">
+                <iframe src="" style="width: 100%; height:100%;"></iframe>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <select>
+                <option value="">None</option>
+                {% for camera in template_values['cameras'] %}
+                    <option value="{{ camera[1] }}">{{ camera[0] }}</option>
+                {% endfor %}
+            </select>
+            <div style="width: 100%; height: 500px">
+                <iframe src="" style="width: 100%; height:100%;"></iframe>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+var auth_key = "{{ template_values['auth_key'] }}";
+
+$(document).ready( function () {
+
+    $("select").change(function(event) {
+
+        var selected_id = event.target.options[event.target.options.selectedIndex].value;
+        var selected_name = event.target.options[event.target.options.selectedIndex].innerText;
+
+        if(selected_id) {
+            var url = "https://login.eagleeyenetworks.com/live/index.html?id=" + selected_id + "&A=" + auth_key;
+        } else {
+            var url = "";
+        }
+
+        // horrible DOM spelunking
+        // find the iframe and set the URL to the history browser
+        $($(event.target).siblings()[0].children[0]).attr('src', url);
+    });
+
+});
+
+
+DtoS = function(epoch_time) {
+    var yy, mm, dd, hr, mn, sc, ms, timecode, jstime;
+        jstime = new Date(epoch_time);
+        yy = jstime.getUTCFullYear();
+        mm = this._padTo2Digits(1 + jstime.getUTCMonth());
+        dd = this._padTo2Digits(jstime.getUTCDate());
+        hr = this._padTo2Digits(jstime.getUTCHours());
+        mn = this._padTo2Digits(jstime.getUTCMinutes());
+        sc = this._padTo2Digits(jstime.getUTCSeconds());
+        ms = jstime.getUTCMilliseconds();
+        if (ms < 10) {
+            ms = '00' + ms;
+        } else if (ms < 100) {
+            ms = '0' + ms;
+        }
+        timecode = yy + mm + dd + hr + mn + sc + '.' + ms;
+        return timecode;
+}
+
+StoD = function (timecode) {
+    if(timecode) {
+        var yy, mm, dd, hr, mn, sc, ms, jstime;
+        yy = parseInt(timecode.substring(0, 4), 10);
+        mm = parseInt(timecode.substring(4, 6), 10);
+        dd = parseInt(timecode.substring(6, 8), 10);
+        hr = parseInt(timecode.substring(8, 10), 10);
+        mn = parseInt(timecode.substring(10, 12), 10);
+        sc = parseInt(timecode.substring(12, 14), 10);
+        ms = parseInt(timecode.substring(15), 10);
+        jstime = new Date(Date.UTC(yy, mm - 1, dd, hr, mn, sc, ms));
+        return jstime.valueOf();
+    }
+}
+
+_padTo2Digits = function(num) {
+    return (((num < 10) ? '0' : '') + num);
+}
+
+
+
+
+</script>
+{% endblock %}

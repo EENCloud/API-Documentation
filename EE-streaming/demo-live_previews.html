@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Receiving Images Through Websocket - Eagle Eye Networks API</title>
+    <style>
+
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+            padding-top: 5rem;
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        input {
+            width:350px;
+        }
+
+
+    </style>
+</head>
+<body>
+<main role="main" class="container-fluid">
+    <div class="container-fluid">
+        <div class="row" id="camera_holder"></div>
+
+        <div class="row">
+            <div class="col-9 offset-1">
+	    	<h1>Receiving Images Through Websockets Example</h1>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-9 offset-1">
+                <p>
+		This example shows how to automatically load and play a Eagle Eye Networks preview stream through a public webpage.  There are two components needed for this demo.  There is a server componenet that securely generates the auth_token needed for the API call.  It is available <a href="https://github.com/mcotton/EE-streaming">on Github</a>. 
+                </p>
+		<p>
+		The second component is the client side JavaScript that is in this page.  This page uses the websockets that are built into modern web browsers.  The source for this page is also <a href="https://github.com/mcotton/EE-streaming/blob/master/preview.html"> on Github</a>.
+		</p>
+		<p>
+		This page calls the server component to get the list of cameras, account id, brand subdomain, and auth_key.  Once it has those values it can construct a <a href="https://apidocs.eagleeyenetworks.com/apidocs/#websocket-polling">websocket connection to our Poll Stream</a>.   The resource type will be `image`.  This will send the contents of the preview image as a base64 encoded string.  Each image will include an `epoch` value.  When you acknowledge the latest epoch value it will send the next image.
+		</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-11 offset-1">
+                <h2>Live demonstration of preview stream</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6 offset-3">
+		    <img id="img" style="width: 640px; height:360px;">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-11 offset-1">
+                <h2>What about CORS?</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9 offset-1">
+                <p>
+                    Websocket connections are not subject to the CORS browser restrictions.  This means that you do not need to contact us to whitelist your domain.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-11 offset-1">
+                <h2>What else can we do with this?</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9 offset-1">
+                <p>
+                    This is an efficient way to quickly add a stream of preview images from a camera.  This means that it can be used in more applications and more uses.  Feel free to reach out to me with any questions or comments at mcotton@een.com
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script>
+
+$(document).ready(function() {
+
+        $.getJSON('https://streamer.een.cloud', function(data) {
+
+                // Start with declairing the basic variables
+                account_sub_domain = data.active_brand_subdomain;
+                account_id = data.account;
+                camera_id = data.cameras[0].id
+                auth_key = data.auth_key
+
+
+                // Build the subscription string
+                data = {"cameras": {}};
+                data.cameras[camera_id] = {"resource": ["image"]}
+
+
+                // Build the WebSocket connection URL
+                connection_url = [
+                        "wss://", 
+                        account_sub_domain,
+                        ".eagleeyenetworks.com",
+                        "/api/v2/Device/",
+                        account_id,
+                        "/Events?A=",
+                        auth_key
+                ].join('');
+
+
+                // make the WebSocket connection
+                socket = new WebSocket(connection_url);
+
+
+                // when the socket opens, register the subscriptions
+                socket.addEventListener('open', function(event) {
+                        console.log('socket opened');
+                        socket.send(JSON.stringify(data));
+                });
+
+                // for every message received, parse the data into an object and update the image on the page
+                // send an acknowledgement that you are ready for the next image
+                socket.addEventListener('message', function(event) {
+                        //console.log(event.data);
+                        json = JSON.parse(event.data);
+                        img = document.getElementById('img')
+                        if(img) {
+                                img.setAttribute('src', 'data:image/jpeg;base64,' + json.data[camera_id].image.image);  
+                        }
+
+                        socket.send('{"ack": ' + json.data[camera_id].image.epoch + '}');
+                });
+
+                // handle the close event
+                socket.addEventListener('close', function(event) {
+                        console.log('socket closed')
+                });
+
+                // handle any errors
+                socket.addEventListener('error', function(event) {
+                        console.log('socket error ', event);
+                });
+
+        });
+
+});
+</script>
+</body>
+</html>
+

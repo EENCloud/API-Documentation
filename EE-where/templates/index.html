@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-4 offset-2">
+            <h2>Find where the video is</h2>
+
+            <p>This will list all the video events for that camera between the date ranges and show if the video is in the cloud.</p>
+        </div>
+
+        <div class="col-md-4">
+            <form action="/" method="post" enctype="multipart/form-data">
+                <select name="esn" style="width:100%;">
+                {% for camera in cameras %}
+                    <option value="{{ camera.camera_id }}" id="{{ camera.camera_id }}" {% if params.esn != None and camera.camera_id != None and camera.camera_id == params.esn %} selected {% endif %}>
+                        {{ camera.name }}
+                    </option>
+                {% endfor %}
+                </select>    
+                {% if params.start_time != None %}
+                <input style="width:100%;"type="date" name="start_time" placeholder="start time" id="start_time" value="{{ params.start_time }}">
+                {% else %}
+                <input style="width:100%;"type="date" name="start_time" placeholder="start time" id="start_time">
+                {% endif %}
+                {% if params.start_time != None %}
+                <input style="width:100%;"type="date" name="end_time" placeholder="end time" id="end_time" value="{{ params.end_time }}">
+                {% else %}
+                <input style="width:100%;"type="date" name="end_time" placeholder="end time" id="end_time">
+                {% endif %}
+                <input style="width:100%;"type="submit" name="Find Video">
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-2">
+            <p>{{ results.name }}</p>
+            <table class="table table-hover" id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Starting Timestmap</th>
+                        <th>File Size</th>
+                        <th>Missing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in results.cloud %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            {% if item[1] == item[2] %}
+                            <td style="background: red; color: white;">{{ item[2] }}</td>
+                            {% elif item[2] == 0 %}
+                            <td style="background: green; color: white;">{{ item[2] }}</td>
+                            {% else %}
+                            <td style="background: yellow; color: black;">{{ item[2] }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+
+
+$(document).ready( function () {
+
+    $('#resultsTable').DataTable({
+        "stateSave": true,
+        "deferRender": true,
+        "paging": true,
+        "info": true,
+        "ordering": true,
+        "lengthChange": false,
+        "searching": true
+    });
+
+
+});
+
+
+</script>
+{% endblock %}

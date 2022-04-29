@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.csv
+*.json
+local_settings.py
+

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+
+{% endblock %}
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-9 offset-1">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Home</li>
+              </ol>
+            </nav>
+        </div>
+        <div class="col-md-1">
+            <button id="generate" type="button" class="btn btn-info">Generate</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-1">
+            <table class="table table-hover" id="myTable">
+                <thead>
+                    <td>QRCode</td>
+                    <td>Annotations</td>
+                    <td>Actions</td>
+                </thead>
+                <tbody>
+                    {% for row in template_values['qrcodes'] %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <img src="/images/{{ row['image_location'] }}" style="width:100px; height:100px;" title="{{ row['value'] }}">
+                                </div>
+                            </td>
+                            <td>
+                                <ul>
+                                {% for annt in row['annotations'] | reverse | batch(5) | first %}
+                                    <li>{{ annt }}</li>
+                                {% endfor %}
+                                {%- if row['annotations']|length > 5 %}
+                                    <li>...</li>
+                                {% endif %}
+                                </ul>
+                            </td>
+                            <td>
+                                <a href="/qrcode/{{ row['id'] }}">See Details</a> <br>
+                                <a href="/images/{{ row['image_location'] }}">Print QR Code</a><br>
+                                <a href="/api/delete/{{ row['id'] }}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+
+$(document).ready( function () {
+
+    $('#generate').on("click", function(data) {
+
+        $.get('/api/generate', function(data) {
+            location.reload();
+        });
+    });
+
+    $('#myTable').DataTable();
+
+});
+
+
+</script>
+{% endblock %}

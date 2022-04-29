@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% endblock%}
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form action="/login" method="POST">
+                <div class="login">
+                    <div class="login-screen">
+                        <div class="app-title">
+                            <h1>Login</h1>
+                        </div>
+                        <div>
+                            <p>
+                                Mini-site to demonstrate how to embed multiple live viewers to create a monitor app using the <a href="https://apidocs.eagleeyenetworks.com/apidocs/">Eagle Eye Networks API</a>.
+                            </p>
+                            <p>
+                                Please login with a valid Eagle Eye Networks user.
+                            </p>
+                        </div>
+                        <div class="login-form">
+                            <div class="control-group">
+                                <input type="text" class="login-field" value="" placeholder="username" name="username">
+                                <input type="password" class="login-field" value="" placeholder="password" name="password">
+                            </div>
+                            <input type="submit" value="Log in" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

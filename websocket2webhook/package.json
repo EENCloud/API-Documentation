@@ -1,0 +1,29 @@
+{
+  "name": "websocket2webhook",
+  "version": "1.0.0",
+  "description": "###Introduction### This is an example of subscribing to the [Eagle Eye Video API](https://een.com) in order to monitor status of cameras and bridges.  This example uses [websocket polling](https://apidocs.eagleeyenetworks.com/apidocs/#websocket-polling).  It will look for events the user cares about and store them inside of a queue.  The workers pull items off the queue and send them as webhooks.",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "kue": "^0.11.6",
+    "request": "^2.88.0",
+    "tough-cookie": "^3.0.1",
+    "tough-cookie-filestore": "0.0.1",
+    "underscore": "^1.9.1",
+    "ws": "^6.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mcotton@een.com",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcotton/websocket2webhook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mcotton/websocket2webhook/issues"
+  },
+  "homepage": "https://github.com/mcotton/websocket2webhook#readme"
+}

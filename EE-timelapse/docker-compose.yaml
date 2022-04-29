@@ -1,0 +1,10 @@
+
+version: '3'
+
+services:
+  timelapse:
+    build: .
+    command: ./startup.sh
+    volumes:
+      - .:/app
+      - ./tmp:/app/tmp

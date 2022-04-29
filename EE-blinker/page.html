@@ -1,0 +1,115 @@
+<html>
+<head>
+    <title>connecting...</title>
+    <style>
+        #preview_image {
+            min-width: 320px;
+            max-width: 640px;
+
+            min-height: 240px;
+            max-height: 480px;
+        }
+
+        #preview_log {
+            height: 225px;
+            overflow-y: hidden;
+            width: 250px;
+            display: inline-block;
+        }
+
+        .frame {
+            margin-left: 50px;
+        }
+
+        .frame p {
+            margin-bottom: 0px;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="frame">
+    <p>
+        <b>Last Updated: </b><span id="timestamp"></span>
+    </p>
+    <span class="full-width">
+        <ul id="preview_log"></ul>
+        <a href="/">
+            <img id="preview_image">
+        </a>
+    <span>
+</div>
+
+
+
+<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+     curr_device = window.location.pathname.replace('/','')
+     curr_device_loading = false;
+  
+    //cache jQuery objects so we can reduce lookups
+    var img_holders = {}; 
+
+    var socket_id = "not_connected";
+
+    var socket = io.connect('', {
+                'reconnect':                    true,
+                'reconnection delay':           1000,
+                'max reconnection attempts':    10
+            });
+
+    
+    socket.on('connect', function() {
+        socket_id = socket.socket.sessionid;
+        console.log('connected :) '); 
+        document.title = 'connected :)' 
+    });
+
+    socket.on('disconnect', function() {
+        socket_id = 'disconnected'; 
+        console.log('disconnected :( '); 
+        document.title = 'disconnected :(' 
+
+        socket = io.connect('', {
+                'reconnect':                    true,
+                'reconnection delay':           1000,
+                'max reconnection attempts':    10
+            }); 
+    });
+
+    socket.on('poll', function (data) {
+        for (var device in data.data.cameras) {
+            if(device == curr_device) {
+                if(data.data.cameras[device].pre) {
+                    if(curr_device_loading == true) {
+                        console.log('skipping preview, already fetching one')
+                        $('#timestamp').text('loading')
+                    } else {
+                        update_camera(device, data.data.cameras[device])
+                    }
+                }
+            }
+        }
+    });
+
+    function update_camera(camera_id, data) {
+        console.log('fetching preview')
+        curr_device_loading = true
+        $('#preview_image').attr('src', '/image/' + camera_id + '/' + data.pre  + '?socket_id=' + socket_id);
+        $('#preview_image').on('load', function() {
+            $('#timestamp').text(data.pre)
+            $('#preview_log').prepend(`<li>${data.pre}</li>`)
+            curr_device_loading = false;
+        });
+    }
+
+</script>
+</body>
+</html>

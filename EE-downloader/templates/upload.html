@@ -1,0 +1,153 @@
+
+{% extends "base.html" %}
+
+
+{% block style %}
+<style>
+    table {
+        height: 400px;
+        display: block;
+        overflow-y: scroll;
+    }
+
+    .hidden {
+        visibility: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="container"> 
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h1>Video Events</h1>
+
+            <video width="640" height="360"  controls preload="auto" poster="">
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8 offset-2">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Camera</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
+                    </thead>
+                    <tbody class="">
+                    
+                    {% for esn in template_values['esns'] %}
+                        {% for item in template_values['esns'][esn] %}
+                        <tr>
+                            <td>
+                                <button class="play hidden" onClick="play_video('{{ esn }}', '{{ item['start_timestamp'] }}', '{{ item['end_timestamp'] }}', '{{ template_values['een'].session.cookies['auth_key'] }}')" >Play</button>
+                            </td>
+                            <td>
+                                <button class="info">Info</button>
+                            </td>
+                            <td class="esn">{{ esn }}</td>
+                            <td class="start">{{ item['start_timestamp'] }}</td>
+                            <td class="end">{{ item['end_timestamp'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+    player = document.getElementsByTagName('video')[0];
+
+    function play_video(esn, start_timestamp, end_timestamp, auth_key) {
+        video_string = ['https://login.eagleeyenetworks.com/asset/play/video.mp4?id=', esn, 
+                        '&start_timestamp=', start_timestamp,
+                        '&end_timestamp=', end_timestamp,
+                        '&A=', auth_key].join('');
+        player.src = video_string;
+    }
+
+    function fetch_video(target, esn, start_timestamp, end_timestamp) {
+        var url = ['/excel/api/fetch_video',
+                    '/', esn,
+                    '/', start_timestamp,
+                    '/', end_timestamp ].join('');
+
+        console.log('URL: ', url);
+        var original_target = target
+        $.get(url, function(data) {
+            data = JSON.parse(data);
+            console.log('callback from fetch_video, call info_video again', data);
+            var callback_target = original_target;
+            (function() {
+                var actual_target = callback_target;
+                setTimeout(function() {
+                        // wait 5 seconds and click the info button again
+                        console.log('clicking target again', $(actual_target));
+                        $(actual_target).click();
+                    }, 3000);
+            })();
+        });
+
+    }
+
+    function info_video(target, esn, start_timestamp, end_timestamp) {
+        var url = ['/excel/api/get_info',
+                    '/', esn,
+                    '/', start_timestamp,
+                    '/', end_timestamp ].join('');
+
+        console.log('URL: ', url);
+        target.text('...');
+        $.get(url, function(data) {
+            data = JSON.parse(data);
+            console.log('callback from info_video', data);
+            var percent_uploaded = Math.round((data['size'] - data['missing']) / data['size']) * 100;
+            
+            if(percent_uploaded < 1) {
+                // need to start the request
+                fetch_video(target, esn, start_timestamp, end_timestamp);
+            } else {
+                // upload has already been uploaded
+                // show the play button
+                $(target).removeClass('hidden');
+                $(target).parent().prev().children('button.play').removeClass('hidden');
+            }
+
+            var display_text = percent_uploaded + '%';
+            target.text(display_text);
+        });
+
+    }
+
+    $(document).ready(function() {
+
+        $('button.info').on('click', function(event) {
+            var target = $(event.target);
+            var esn = $(target).parents().next('.esn').text(),
+                start_timestamp = $(target).parents().next().next('.start').text(),
+                end_timestamp = $(target).parents().next().next().next('.end').text();
+
+            info_video(target, esn, start_timestamp, end_timestamp);
+
+        });
+
+
+
+        $('button.info')[0].click();
+
+    });
+
+
+</script>
+{% endblock %}

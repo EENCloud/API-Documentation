@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-12">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h1>Available Cameras</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <th scope="col">ESN</th>
+                        <th scope="col">Camera</th>
+                    </thead>
+                    <tbody class="">
+                    
+                    {% for cam in template_values['cameras'] %}
+                        <tr>
+                            <td class="esn"><a href="/camera/{{ cam['camera_id'] }}">{{ cam['camera_id'] }}</a></td>
+                            <td class="end">{{ cam['name'] }}</td>
+                        </tr>
+                    {% endfor %}
+                    
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

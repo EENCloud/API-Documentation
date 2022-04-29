@@ -1,0 +1,93 @@
+<html>
+<head>
+    <title>connecting...</title>
+    <style>
+        img {
+            width: 320px;
+            height: 180px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  
+    //cache jQuery objects so we can reduce lookups
+    var img_holders = {};
+    var camera_status = {};
+    
+    var socket_id = "not_connected";
+
+    var socket = io.connect('', {
+                'reconnect':                    true,
+                'reconnection delay':           1000,
+                'max reconnection attempts':    10
+            });
+
+    
+    socket.on('connect', function() { 
+        socket_id = socket.socket.sessionid;
+        console.log('connected :) '); 
+        document.title = 'connected :)' 
+    });
+
+    socket.on('disconnect', function() {
+        socket_id = 'disconnected'; 
+        console.log('disconnected :( '); 
+        document.title = 'disconnected :(' 
+    });
+
+    // socket.on('poll', function (data) {
+    //     for (var device in data.data.cameras) {
+    //         if(data.data.cameras[device].event['ROMS']) {
+    //             if(data.data.cameras[device].event['ROMS']['roiid'] == 1457106511) {
+    //                 console.log("received an ROI start in the entrance")
+    //                 console.log(data.data.cameras[device].event['ROMS'])
+    //                 $('img').css('border', 'red solid 10px');
+    //             } else {
+    //                 console.log("received an ROI start event");
+    //                 console.log(data.data.cameras[device].event['ROMS'])
+    //             }
+    //         }
+    //         if(data.data.cameras[device].event['ROME']) {
+    //             console.log("received an ROI end event");
+    //             console.log(data.data.cameras[device].event['ROME'])
+    //             $('img').css('border', 'white solid 10px');
+    //         }
+    //         if(data.data.cameras[device].pre) {
+    //             if(!img_holders[device]) {
+    //                 $('body').append('<a href="/' + device + '"><img id="img_' + device + '"></a>');
+    //                 img_holders[device] = $('#img_' + device);
+    //                 camera_status[device] = {'loading': false }
+    //             }
+                
+    //             // if(!camera_status[device]) {
+    //             //     camera_status[device] = { 'loading': false }
+    //             // }
+
+    //             if(camera_status[device].loading == false) {
+    //                 console.log('fetching preview')
+    //                 img_holders[device].attr('src', '/image/' + device + '/' + data.data.cameras[device].pre + '?socket_id=' + socket_id);
+    //                 //camera_status[device] = { 'loading': '/image/' + device + '/' + data.data.cameras[device].pre }
+    //                 camera_status[device] = {'loading': true }
+    //                 img_holders[device].on('load', function() {
+    //                     camera_status[device] = {'loading': false }
+    //                 })
+    //                 img_holders[device].on('error', function() {
+    //                     camera_status[device] = {'loading': false }
+    //                 })
+    //             } else {
+    //                 console.log('already loading a preview, skip loading')
+    //             }
+
+    //         } 
+    //     }
+    // });
+</script>
+</body>
+</html>

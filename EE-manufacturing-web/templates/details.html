@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+
+
+
+{% endblock %}
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Cameras</li>
+              </ol>
+            </nav>
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-md-10 offset-1">
+            <table class="table table-hover" id="myTable">
+                <thead>
+                    <td>Thumbnail Image</td>
+                    <td>Camera ID</td>
+                    <td>Start Time</td>
+                    <td>End Time</td>
+                    <td>Actions</td>
+                </thead>
+                <tbody>
+                {% for row in template_values['qrcodes']['annotations'] %}
+
+                <tr>
+                    <td>
+                        <a href="{{ template_values['host'] }}/hist/index.html?id={{ row.camera_id }}&ts={{ row.EE_starttime }}" target="_blank">
+                            <img src="{{ template_values['host'] }}/asset/prev/image.jpg?id={{ row.camera_id }}&timestamp={{ row.EE_starttime }}&asset_class=all" style="width: 150px;">
+                        </a>
+                    </td>
+                    <td>{{ row.camera_id }}</td>
+                    <td>{{ row.EE_starttime | EE_date(row.camera_id) }}<br><sub>{{ row.EE_starttime }}</sub></td>
+                    <td>{{ row.EE_endtime | EE_date(row.camera_id) }}<br><sub>{{ row.EE_endtime }}</sub></td>
+                    <td>
+                        <a href="{{ template_values['host'] }}/hist/index.html?id={{ row.camera_id }}&ts={{ row.EE_starttime }}" target="_blank">
+                            link to video
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>                    
+        </div>
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+
+
+$(document).ready( function () {
+
+    $('#myTable').DataTable();
+
+});
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block container %}
+<section class="maincontent-wrap">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="maincotnent shadow-z-1">
+                            <div class="mainmenu">
+                                <div class="navbar navbar-nobg">
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="navbar-collapse collapse"> 
+                                        <ul class="nav navbar-nav">
+                                            <li class="active"><a href="/">Home <div class="ripple-wrapper"></div></a></li>
+                                            <li><a href="/blog/programming">Programming</a></li>
+                                            <li><a href="/blog/work">Work</a></li>
+                                            <li><a href="/blog/photography">Photography</a></li>
+                                            <li><a href="/blog/contact">Contact</a></li>
+                                            {% if admin %}
+                                              <li><a href="/new">New</a></li>
+                                            {% endif %}
+                                        </ul>                                                     
+                                    </div>     
+                                </div> 
+                            </div> 
+                            
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="article-list">
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Nature</a></p>
+                                                <h2><a href="single.html">Green Lantern for Green World!</a></h2>
+                                                <p class="post-meta">by Farhan Rizvi  @ 11th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <a href="single.html"><img class="img-responsive" src="img/post-2.jpg" alt=""></a>
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+
+                                        <!--
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Movie</a></p>
+                                                <h2><a href="single.html">My Favorite Spiderman Movie</a></h2>
+                                                <p class="post-meta">by Ratul Ahmed  @ 09th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <a href="single.html"><img class="img-responsive" src="img/post-1.jpg" alt=""></a>
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Movie</a></p>
+                                                <h2><a href="single.html">Marvel Phase to SuperCut</a></h2>
+                                                <p class="post-meta">by Rasel Ahmed  @ 07th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <div class="embed-responsive embed-responsive-16by9">
+                                                    <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/113767337" width="500" height="281"></iframe>
+                                                </div>
+                                         
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Fun</a></p>
+                                                <h2><a href="single.html">The Return of Hulk!</a></h2>
+                                                <p class="post-meta">by Tamanna Ferdous  @ 07th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <div class="embed-responsive embed-responsive-16by9">
+                                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Y9FUzBEH_v8" width="500" height="281"></iframe>
+                                                </div>
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Character</a></p>
+                                                <h2><a href="single.html">Thor - The Hero of Power!</a></h2>
+                                                <p class="post-meta">by Farhan Rizvi  @ 06th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <img class="img-responsive" src="img/article-2.jpg" alt="">
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Analysis</a></p>
+                                                <h2><a href="single.html">Beauty Queen of Avengers</a></h2>
+                                                <p class="post-meta">by Rasel Ahmed  @ 05th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <a href="single.html"><img class="img-responsive" src="img/article-3.jpg" alt=""></a>
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p>Movie</p>
+                                                <h2><a href="single.html">The Target Man!</a></h2>
+                                                <p class="post-meta">by Ratul Ahmed  @ 05th May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <a href="single.html"><img class="img-responsive" src="img/article-4.jpg" alt=""></a>
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        <article class="post">
+                                            <header class="article-title text-center">
+                                                <p><a href="archive.html">Secret</a></p>
+                                                <h2><a href="single.html">Mind can be controled like mine!</a></h2>
+                                                <p class="post-meta">by Unknown  @ 02nd May</p>
+                                            </header>
+
+                                            <div class="article-featured-content shadow-z-2">
+                                                <a href="single.html"><img class="img-responsive" src="img/article-5.jpg" alt=""></a>
+                                            </div>
+
+                                            <div class="post-summary">
+                                                <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+                                            </div>
+
+                                            <div class="post-detail-link text-center">
+                                                <a href="single.html" class="btn btn-fab btn-raised btn-material-red">
+                                                    <i class="fa fa-plus"></i>
+                                                    <div class="ripple-wrapper"></div>
+                                                </a>
+                                            </div>
+                                        </article>
+                                        -->
+                                        
+                                        
+                                        <nav role="navigation" class="navigation posts-navigation">
+                                            <div class="nav-links">
+                                                <div class="nav-previous">
+                                                    <a href="#">Older posts</a>
+                                                </div>
+                                                <div class="nav-next">
+                                                    <a href="#">Newer posts</a>
+                                                </div>
+                                            </div>
+                                        </nav>                                        
+                                    </div>                                    
+                                </div>
+                            </div>
+                            
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+
+
+

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-4 offset-4">
+
+            <h2>Pulling Video from Excel</h2>
+
+            <p>Sometimes you get a series of events in Excel that you need video for.  That data could come from a Point of Sale (POS) System or vehicles passing through a Toll Booth or employee time clocks.</p>
+
+            <p>This sample code is to show how to easily pull the video from Eagle Eye Networks without having to manually download the data.</p>
+
+            <p>
+                <form action="/excel/upload" method="post" enctype="multipart/form-data">
+                  <input type="file" name="file">
+                  <input type="submit" value="Upload">
+                </form>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>HTML5 Video Player Example - Eagle Eye Networks API</title>
+    <style>
+
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+            padding-top: 5rem;
+        }
+
+        .starter-template {
+            padding: 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        input {
+            width:350px;
+        }
+
+
+    </style>
+</head>
+<body>
+<main role="main" class="container-fluid">
+    <div class="container-fluid">
+        <div class="row" id="camera_holder"></div>
+
+        <div class="row">
+            <div class="col-9 offset-1">
+	    	<h1>HTML5 Video Player Example</h1>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-9 offset-1">
+                <p>
+		This example shows how to automatically load and play a Eagle Eye Networks video stream through a public webpage.  There are two components needed for this demo.  There is a server componenet that securely generates the auth_token needed for the API call.  It is available <a href="https://github.com/mcotton/EE-streaming">on Github</a>. 
+                </p>
+		<p>
+		The second component is the client side JavaScript that is in this page.  This page uses our <a href="https://een.cloud/article-20.html">HTML5 Video Player</a> and the source for this page is also <a href="https://github.com/mcotton/EE-streaming/blob/master/demo.html"> on Github</a>.
+		</p>
+		<p>
+		This page calls the server component to get the list of cameras and auth_key.  It then downloads the latest preview image use as the poster image for the video player.  It constructs the live stream URL and starts the video player.  It requests video in 90 second chunks.  When the player is within 5 seconds of the end of the video it makes another request for an additional 90 seconds.  It will continue to do this while the page is being viewed.
+		</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-11 offset-1">
+                <h2>How to automatically play live video</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6 offset-3">
+                <video id="videoElement_live" style="width: 100%; height:100%;" controls autoplay muted></video>
+            </div>
+        </div>
+
+        <div class="row" style="display: none">
+            <div class="col-7 offset-1">
+                <p>
+                    We have already been using the HTML5 video player for video playback inside of the Eagle Eye VMS.  It has been the default option since the second half of 2019.  If you are embedding or linking to the video player page/history browser than you already have been using the HTML5 video player.
+                </P>
+                <p>
+                    Please supply a valid ESN and an auth_key that has access to view the video.
+                </p>
+                <p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>ESN</td>
+                        <td><input type="text" placeholder="Camera ESN" maxlength="8" style="form-control" id="1_esn"></td>
+                    </tr>
+                    <tr>
+                        <td>Start Timestamp</td>
+                        <td> <input type="text" placeholder="Start timestamp" maxlength="18" style="form-control" id="1_start_timestamp" value="stream_een.cloud_demo"></td>
+                    </tr>
+                    <tr>
+                        <td>End Timestamp</td>
+                        <td><input type="text" placeholder="End timestamp" maxlength="18" style="form-control" id="1_end_timestamp" value="+90000"></td>
+                    </tr>
+                    <tr>
+                        <td>Auth Key</td>
+                        <td> <input type="text" placeholder="Auth Key" maxlength="37" style="form-control" id="1_auth_key"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br>
+                <button class="btn btn-primary" id="load_live_button">load live video</button>
+                </p>
+            </div>
+            <div class="col-4">
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-11 offset-1">
+                <h2>What else can we do with this?</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9 offset-1">
+                <p>
+                    I am excited the see the additional applications that can benefit from easily embeddable video.  Live video can now be used as just a standard video component.  Feel free to reach out to me with any questions or comments at mcotton@een.com
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="EEN.MediaPlayer.js"></script>
+<script>
+
+    $(document).ready(function() {
+
+        var flvjs = EEN.MediaPlayer.flvjs;
+	var threshold = 5;
+
+	$.getJSON('https://streamer.een.cloud', function(data) {
+		$('#1_auth_key').val(data.auth_key);
+		$('#1_esn').val(data.cameras[0].id);
+		poster = "https://login.eagleeyenetworks.com/asset/prev/image.jpeg?id=" + data.cameras[0].id
+			+ "&asset_class=all&timestamp=now&A=" + data.auth_key;
+
+                var video = document.getElementById('videoElement_live');
+		video.poster = poster;
+
+		loadPlayer();
+
+		video.addEventListener('stalled', function() { console.log('stalled event fired'); });
+		video.addEventListener('suspend', function() { console.log('suspend event fired'); });
+		video.addEventListener('waiting', function() { console.log('waiting event fired'); });
+
+		video.addEventListener('timeupdate', function() { 
+			console.log(this.currentTime);
+			if(this.duration - this.currentTime < threshold) {
+				console.log('refreshing stream');
+				loadPlayer();
+			}
+		});
+
+	});
+	
+
+        function loadPlayer() {
+            if (flvjs.isSupported()) {
+                var videoElementLive = document.getElementById('videoElement_live');
+                var config = new EEN.MediaPlayer.MediaItem($('#1_esn').val());
+                config.setAuthKey($('#1_auth_key').val())
+                config.setDomain('login.eagleeyenetworks.com')
+                config.setStartTime($('#1_start_timestamp').val() + Math.random())
+                config.setEndTime($('#1_end_timestamp').val())
+                EEN.MediaPlayer.startPlayback(config, videoElementLive);
+            } else {
+		console.log("browser does not support this");
+		}
+        }
+
+
+    });
+
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,3 @@
+uploads
+*.pyc
+data/redis/appendonly.aof

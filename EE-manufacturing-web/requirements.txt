@@ -1,0 +1,13 @@
+Flask==1.0.2
+requests==2.20.1
+Werkzeug==0.14.1
+flask-session==0.3.1
+ipython==7.4.0
+sqlalchemy
+flask_sqlalchemy
+datetime
+pytz
+pypng
+pyzbar
+pillow
+pyqrcode

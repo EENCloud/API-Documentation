@@ -1,0 +1,3 @@
+*.pyc
+EagleEye/__pycache__
+EagleEye/__pycache__/*.pyc

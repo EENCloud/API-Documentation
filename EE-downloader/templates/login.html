@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% endblock%}
+
+{% block main %}
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form action="/login" method="POST">
+                <div class="login">
+                    <div class="login-screen">
+                        <div class="app-title">
+                            <h1>Login</h1>
+                        </div>
+                        <div>
+                            <p>
+                                This is a sample application show how to interact with the Eagle Eye Networks API.  This little webapp lets you choose the camera and time you would like to see video from.  You can play or download the video if it is already in the cloud, or you can request that it gets uploaded immediately.
+                            </p>
+                            <p>
+                                In order to access your cameras and video events it needs you to login with as a valid Eagle Eye Networks user.
+                            </p>
+                        </div>
+                        <div class="login-form">
+                            <div class="control-group">
+                                <input type="text" class="login-field" value="" placeholder="username" name="username">
+                                <input type="password" class="login-field" value="" placeholder="password" name="password">
+                            </div>
+                            <input type="submit" value="Log in" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

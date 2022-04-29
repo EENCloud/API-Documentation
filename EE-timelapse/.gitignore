@@ -1,0 +1,7 @@
+uploads
+*.pyc
+__pychache__/
+*.aof
+.DS_Store
+tmp/*.jpg
+tmp/*.mp4
