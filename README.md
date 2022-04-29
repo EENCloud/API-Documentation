@@ -40,4 +40,4 @@ Quick monitor tool using the Eagle Eye Networks API.
 
 [Insomnia](./Insomnia-Workspace)
 
-[Websocket to Webhook](./)
+[Websocket to Webhook](./websocket2webhook)
