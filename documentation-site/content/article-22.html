@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Getting Devices in all Sub-accounts - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container">
+        <div class="container">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Getting Devices in all Sub-accounts</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-6 offset-1"> 
+                    <p>
+                        We often are asked, How do I get all the devices in all of my sub-accounts?  This could be because they want to check on the status of all of the devices, or it could be that they are trying to match up this data with another data source.  This is a great question and this article will help answer the question.
+                    </p>
+                    <p>
+                        We will assume that you have a valid Eagle Eye user and that it is part of a reseller account.  We will also assume that you have been permission to access at least one sub-account that contains devices.  As a reseller you known that devices such as bridges, cameras, and switches do not exist at the reseller level but instead live in sub-accounts.
+                    </p>
+                </div>
+                <div class="col-5">
+                    <img src="images/article-22-001.png">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 1: Login as a user in the reseller account.</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">  
+                   <p>
+                       As a user in the reseller account, you will need to login through the API.  You will first call <a href="https://apidocs.eagleeyenetworks.com/apidocs/#1-authenticate">Authenticate</a> and then pass the token received in that call to <a href="https://apidocs.eagleeyenetworks.com/apidocs/#3-authorize">Authorize</a>.  The end result will be a `auth_key` returned as a cookie.  You will use this cookie in subsequent calls.
+                    </P>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 2: Get a List of Sub-accounts</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        You can get a list of the all the sub-accounts using the <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-accounts"> Get List of Accounts</a> API call.  This call with return all of the accounts that your user has access to.  You can only call this API when you are in the context of the reseller account.  In future steps you will switch into one of these other accounts so please take care to be in the reseller context when making this call.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 3: Switch Your User Account</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        Users have two properties on their user object returned by the <a href="">Get User</a> endpoint.  The account that owns your account (ie the reseller you belong to) is the `owner_account_id`.  In order for a user to see what is going on in a sub-account they need to change the account context.  The curent account context is stored in the `active_account_id`.
+                    </p>
+                    <p>  You can change your account context by usign the <a href="https://apidocs.eagleeyenetworks.com/apidocs/#switch-account">Switch Account</a> API.  Please note that you can switch back to the reseller context by calling it with your `owner_account_id` or with an empty string.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 4: Get List of Devices</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        When you are in the context of a sub-account you are able to <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-cameras">Get List of Devices</a> as if you were a user in that sub-account.  You can also retrieve images and video or subscribe to the poll stream.  Using the switch account API provides great functionality when using sub-accounts.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 5: Repeat for Each Sub-account</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        For each sub-account you can follow this same procedure to iterate through each sub-account.  Please note that if you are subscribing to the poll stream for devices in the sub-account you will need to maintain that connection while inside the context of the sub-account.  This means you can not switch out of the sub-account without the connection closing.  You would need to start multiple sessions by logging-in again as a reseller and maintaining a separate cookie/session.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <p>
+                        This is a very common questions once API users start dealing with a large number of cameras.  This can be used to monitor the status of all the cameras, switches, and bridges.  It can also be used to track motion events across different locations.  A great example would be counting motion events on all the front door cameras across all locations.
+                    </p>
+                    <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

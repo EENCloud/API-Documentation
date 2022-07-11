@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Getting High Resolution Images from Video - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Getting High Resolution Images from Video</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        Using an API is like playing with Lego blocks.  Ideally the individual components should be small and useful on their own.  They should also be clear in what their purpose.  Mostly important for me, is that they should be able to connect together to form more specialized blocks.  This blog post will cover how to create new functionality from existing blocks in the <a href="https://apidocs.eagleeyenetworks.com/apidocs/#introduction">Eagle Eye API</a>.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 1: Define the Problem</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+                       Inside of the Ealge Eye API we provide a low resolution previews and the full high resolution video.  For some API users, there is a need for images with higher resolution than preview images, but not the need to play the video.  This sample was written for a  construction equipment rental company.  They needed detailed images but because they are using a metered cellular connection, playing full video was not practical.
+                    </P>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 2: Understand Available Resources</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        Instead of transmitting the entire video, this solution only sends up a fraction of the video and extracts a full resolution image from it.  This means they can use the preview images for low resolution overview, then request a high resolution image if needed.  Because they are recording the video, if something critical does happen they are able to request the video from the bridge.
+                    </p>
+                    <p>
+                        From the two basic streams we are able to combine them into new functionality.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 3: Combine Into Something New</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                       The core idea is fairly simple.  If you send this new service a camera, timestamp and Auth key, it will return a link the the full resolution image.  You would make a HTTP GET to "/api/pull_frame/<i>device_id</i>/<i>start_timestamp</i>/<i>auth_key</i>" and retrieve the image with a HTTP GET to "/api/download/<i>device_id</i>-<i>start_timestamp</i>.jpg"
+                    </p>
+                    <p> We are using <a href="https://ffmpeg.org/">ffmpeg</a> to extract the image.  Ffmpeg is known as a Swiss Army knife for video conversion, but it is also known has its opaque options.  We are using the following command behind the scenes "ffmpeg -i {local_filename} -ss 00.00 -vframes 1 -y tmp/{device_id}-{start_timestamp}.jpg".
+                    </p>
+                    <p>
+                        Other than calling ffmpeg, most of the functionality is just in standing up a <a href="http://flask.pocoo.org/">Flask</a> server to handle the two endpoints.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <p>
+		    This is a simple little example that you can run on your own insfrastructure and call it as needed.  The code is available <a href="https://github.com/mcotton/EE-framepuller"> on Github</a>.  There are plenty of things that a high resolution image can be used for.  It is common to use this to create a <a href="https://een.cloud/article-9.html">full resolution timelapse</a>.  You could do the first pass of analytics on the preview images and the high resolution image can be requested as needed for additional processing. 
+                    </p>
+                     <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

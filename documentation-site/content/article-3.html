@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>een.cloud - Embed History Browser</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+        .quoted {
+            color:salmon;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Embed Eagle Eye History Browser</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        Eagle Eye Netowrks makes it easy to embed our history browser into your existing app or website.  There are many applications where video can make the product significantly better.  Showing recorded video is essential for reviewing transactions in Point of Sales systems, doors opening in Access Control, or counting cars going through a toll station.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 1: Construct the API Call</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 offset-1">
+                    <p>
+                        Each camera in our system has a unique identification number.  We refer to this as the ESN.  You can find the ESN for you camera by looking in camera settings.  This will be passed into the URL as the <span class="quoted">`id`</span> parameter
+                    </p>
+                    <p>
+                        The second parameter is the time you want the history browser to start at.  We use the UTC timezone and format our timestamp to be YYYYMMDDhhmmss.zzz with zzz being microseconds.  An example EEN timestamp would be 20181225060000.000 for 6:00am on Christmas morning.  This gets passed as the <span class="quoted">`ts`</span> parameter.
+                    </p>
+                    <p>
+                        There are several ways to supply the authorization token.  It can be passed as a cookie with the request or as the <span class="quoted">`A`</span> parameter.  Passing it this way can be convenient for constructing URLs for the user.  If it is not included, the browser will try to use a cookie for the domain.  If that doesn't work the contents of the window will redirect to the login page.
+                    </p>
+                    <p>
+                        Now that we know how to construct the URL, we can go ahead an put everything together.  Our URL now looks like:
+                        <blockquote>
+                            https://login.eagleeyenetworks.com/hist/index.html?<span class="quoted">id=device</span>&<span class="quoted">ts=20181219002132.943</span>&<span class="quoted">A=auth_token</span>
+                        </blockquote>
+                    </p>
+                </div>
+                <div class="col-5">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 2: Embedding the iFrame</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1">
+                    
+                    <p>
+                        You can add the following line to your webpage to embed the video player.  The <span class="quoted">`src`</span> attribute should be set to the correct URL.
+                        <blockquote>
+                            &lt;iframe src=" <span class="quoted">https://login.eagleeyenetworks.com/hist/index.html?id=device&ts=timestamp&A=auth_token</span>"&gt;
+                        </blockquote>
+                    </p>
+                
+                </div>
+
+            </div>
+
+
+            
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1">
+                    <p>
+                        Including video with a single line of code is very powerful.  You can combine video recordings with other data sources by finding corallated times of the event.  Seeing the data and video side by side is very effective.  I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

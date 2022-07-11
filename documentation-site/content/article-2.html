@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>een.cloud - Embed Live VIdeo PLayer</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+        .quoted {
+            color:salmon;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Embed Eagle Eye Live Video Player</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        Eagle Eye Netowrks makes it easy to embed live video into your existing app or website.  There are many applications where video can make the product significantly better.  This can be used for show what the surf conditions are at a local beach.  It can be a critical component of responding to emergency situations.  It can also be used to check on your dog at doggy daycare.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 1: Construct the API Call</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 offset-1">
+                    <p>
+                        Each camera in our system has a unique identification number.  We refer to this as the ESN.  You can find the ESN for you camera by looking in camera settings.  This will be passed into the URL as the <span class="quoted">`id`</span> parameter
+                    </p>
+                    <p>
+                        The second piece of this is providing the authorization token for this call.  There are several ways to make pass your authorization token.  It can be passed as a cookie with the request or as the <span class="quoted">`A`</span> parameter.  Passing it this way can be convenient for constructing URLs for the user.
+                    </p>
+                    <p>
+                        Now that our know how to construct the URL, we can go ahead an put everything together.  Our URL now looks like:
+                        <blockquote>
+                            https://login.eagleeyenetworks.com/live/index.html?<span class="quoted">id=device</span>&<span class="quoted">A=auth_token</span>
+                        </blockquote>
+                    </p>
+                </div>
+                <div class="col-5">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 2: Embedding the iFrame</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1">
+                    
+                    <p>
+                        You can add the following line to your webpage to embed the video player.  The <span class="quoted">`src`</span> attribute should be set to the correct URL.
+                        <blockquote>
+                            &lt;iframe src="<span class="quoted">https://login.eagleeyenetworks.com/live/index.html?id=device&A=auth_token</span>"&gt;
+                        </blockquote>
+                    </p>
+
+                    <p>
+                        You can improve the performance when live streaming by using the user's <span class="quoted">active_brand_subdomain</span> but that is beyond the scope for this article.  You can find more infomation about that <a href="https://apidocs.eagleeyenetworks.com/apidocs/#3-authorize">here.</a>
+                
+                </div>
+
+            </div>
+
+
+            
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1">
+                    <p>
+                        Including video with a single line of code is very powerful.  There are many places where it can be added to augment and improve existing functionality.  I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

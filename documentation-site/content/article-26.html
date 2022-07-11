@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Accessing Live and Recorded Video - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Accessing Live and Recorded Video</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        Video is the very core of our API and make it easily available is the most basic element of what we do.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Video Options</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+                      For all cameras connected to our platform, we provide the full video stream exactly as we got it from the camera.  This is the original h.264 encoded video without additional compression or modification.  As a convenience we wrap the video in a FLV container in order to make it into common file objects that. 
+                    </P>
+                    <p>
+                        You can play live and recorded video in any player that can handle FLV and MP4 files.  You can also follow the instrustions <a href="/article-20.html"> here </a> to use our HTML5 video player.  This is a JavaScript file that allows the built-in HTML5 video tag to play FLV files.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>API Endpoint</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        Retrieving video is done by make a HTTP call our <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-video"> Get Video</a> API endopint.
+                    </p>
+                    <p>
+                        When requesting video through the API it will be served from our cloud instead of serving it from the bridge on the customer site.  If the video has not been uploaded to the bridge yet (due to bandwidth or schedule settings), this request will be moved to the "on-demand" queue.  The bridge will use all avialable bandwidth to immediately upload this to the cloud so that it can be forwarded to the reqeuster.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Recorded Video</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        In order to play recorded video, you will need the camera ESN along with the start_timestamp and end_timestamp.  You are able to pull a whole recorded video clip or you can slice part of the video.  The video returned will start from the previous I-frame to the start_timestamp.
+                    </p>
+                    <p>
+                        You can use the <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-videos">Video List</a> API endpoint to get a list of start_timestamps and end_timestamps inside a time range.
+                    </p>
+                    <p>
+                        Recorded video can be requested in either FLV or MP4 format.  Requests for MP4 video will be transcoded for better compatability.  One consideration about requesting MP4 videos is that the entire video must be uploaded to the cloud so that transcoding can begin.  This API endpoint will return a 200 if the MP4 file is ready to be served and will return a 201 if the conversation process is not done yet.  Please wait a suitable period and request again.  Additional requests will not cause an additional conversation process.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Live Video</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        The values send as parameters for requesting live video differ slightly from requesting recorded video.  Instead of passing a timestamp into start_timestamp you can use the "stream_" identifier with a unique string appended to it.  By using a stream identifier it makes it easy to make additional requests to extend the stream.  For the end_timestamp we use an offset using the "+" symbol with a number of milliseconds.  We suggest using "+300000" to stream for five minutes. 
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Camera and Bandwidth Settings</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        Retrieving video is dependant on the settings on both the camera and bridge.  It is important that the camera and bridges settings are optimal to your performance requirements.
+                    </p>
+                    <p>
+                        For example, if live video performance is a high priority, make sure that the bridge has enough to bandwidth availble to stream at the video bitrate of the camera.
+                    </p>
+                    <p>
+                        Another example, if you are using a cellular or metered connection, it may be wise to limit the length of video requests that are being requested.  A pre-roll of 2 seconds and post-roll of two seconds are added to each video clip.  This additional video can be removed if trying to optimized for low bandwidth useage.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <p>
+                        Adding video to security and non-secuirty related applications is easy.  We specialize on doing the heavy-lifting to make dealing with video easier.
+                    </p>
+                    <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

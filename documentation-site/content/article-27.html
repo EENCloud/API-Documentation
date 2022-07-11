@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Why is my device list empty? - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Answers to Common Questions</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        There are several common questions that we get as people start using the <a href="https://apidocs.eagleeyenetworks.com/apidocs/"> Eagle Eye Networks API</a>.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Why is my list of devices empty?</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+                       The <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-cameras">list of devices</a> returned depends on the permissions that the user has.  It will only return items that they have access to.  This can include devices in the same account or devices shared with them from another account.
+                    </P>
+                    <p>
+                        If you user is created on a reseller account you will not have access to any devices until you switch into a sub-account.  The reseller account itself does not contain any devices.  All devices live in sub-accounts.  You can get a <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-accounts">list of sub-accounts</a> and <a href="https://apidocs.eagleeyenetworks.com/apidocs/#switch-account">switch context</a> into any account you have access to.  After changing your context, you will have access to the devices in that account with administrator permissions.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Why are there two different places to add users?</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+		   The reason we have users in both places is so you can add users to just a specific sub-account or have users that work for the reseller that can manage multiple sub-accounts.
+		   </p>
+		   <p> Imaging having two different installations, not having a reseller account make it difficult to manage all equipment and users in a single account. It would also be challenging to make sure every user had the correct permissions to just their equipment.
+		</p>
+		<p> By separating out the reseller and the sub-accounts, we can provide isolation so that cameras are not inadvertently shared. We can also provide a much simpler user management interface.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>            
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Verify the user has permission to access devices</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        We want users to be in control of their devices.  Each user can be given access to all, some, or none of the devices in an account.  The account administrator configures each user with both the device and the specific permissions granted for the device.
+                    </p>
+                    <p>
+                        I recommend following the guideline of least permission.  Each user should be given enough access and permission to complete their job but should not be given any unneeded access or permission.
+                    </p>
+                    <p>
+                        Following the above guideline is a good security practice because it limits the potential changes a user could make by mistake.  It also limits the overall damage that could be caused if a user's credentials were compromissed.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+           
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <p>
+                        The options are almost limitless.  It really just depends on what you wanting to do.  I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

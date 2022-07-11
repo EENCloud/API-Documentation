@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Playing live and historic video with your own flash player</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Playing live and historic video with your own Flash player</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        This is a test of embedding an older version of the flowplayer flash video player.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 1: Embedding flash player</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 offset-1">       
+                   <p>
+                       Make sure you browser isn't blocking flash
+                   </p>
+                </div>
+                <div class="col-5">
+                    <div id="video-player"></div>
+                </div>
+            </div>
+
+            
+
+            
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Wrapping up</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1">
+
+                    <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/flowplayer/flowplayer-3.2.13.min.js"></script>
+<script>
+    // set the link
+    $('#video-player').attr('href', "https://c000.eagleeyenetworks.com/asset/play/video.flv?id=100fcc3b;start_timestamp=stream_ton;end_timestamp=%2B300000;A=c000~7e5994275d7a15116358dfbecc39508a")
+
+    // start it up
+    api = flowplayer("video-player", "flowplayer/flowplayer-3.2.18.swf");
+
+    api.onLoad(function() {
+        $('#video-player').height($('#video-player').width() * (9/16))
+    });
+</script>
+
+</body>
+</html>

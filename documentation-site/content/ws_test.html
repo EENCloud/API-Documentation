@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<img id="img" src=""/>
+</body>
+
+<script>
+
+
+// Start with declairing the basic variables
+account_sub_domain = "c001";
+account_id = "00009673";
+camera_id = "100d93f9";
+auth_key = "c001~281058c5923b3a0cd7835b9962bf23d6";
+
+
+// Build the subscription string
+data = {"cameras": {}};
+data.cameras[camera_id] = {"resource": ["image"]}
+
+
+// Build the WebSocket connection URL
+connection_url = [
+			"wss://", 
+			account_sub_domain,
+			".eagleeyenetworks.com",
+			"/api/v2/Device/",
+			account_id,
+			"/Events?A=",
+			auth_key
+		].join('');
+
+
+// make the WebSocket connection
+socket = new WebSocket(connection_url);
+
+
+// when the socket opens, register the subscriptions
+socket.addEventListener('open', function(event) {
+	console.log('socket opened');
+	socket.send(JSON.stringify(data));
+});
+
+// for every message received, parse the data into an object and update the image on the page
+// send an acknowledgement that you are ready for the next image
+socket.addEventListener('message', function(event) {
+	console.log(event.data);
+	json = JSON.parse(event.data);
+	img = document.getElementById('img')
+	if(img) {
+		img.setAttribute('src', 'data:image/jpeg;base64,' + json.data[camera_id].image.image);	
+	}
+
+	socket.send('{"ack": ' + json.data[camera_id].image.epoch + '}');
+});
+
+// handle the close event
+socket.addEventListener('close', function(event) {
+	console.log('socket closed')
+});
+
+// handle any errors
+socket.addEventListener('error', function(event) {
+	console.log('socket error ', event);
+});
+
+</script>
+</html>

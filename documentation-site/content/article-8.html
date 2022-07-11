@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Generating Time Lapses (part 2) - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Generating Time Lapses (part 2)</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        This is the second of a three part series.  In the <a href="https://een.cloud/article-7.html">previous post</a> we talked about how to generate a time lapse based on preview images from a camera.  We also looked at two examples of how it can give you an overview of what happened throughout the day.
+                    </p>
+                    <p>
+                        In this post we are going to look at another strategy for deciding what images to show.  We will be creating the time lapse based on activity instead of time.  We will still keep it to the same 60 seconds in total length.
+                    </p>
+                    <p>
+                        In additiona to providing preview images, the Eagle Eye VMS also generates special previews called thumbnails.  Thumbnails are the same resolution as preview images but are intended to best represent the object in motion.  We do this by tracking when the object is largest and most centered inside the frame.
+                    </p>
+                    <p>
+                        Imagine that you had a person walked across the screen from left to right.  A thumbnail would be generated when the person is in the middle of the screen.  Thumbnails are created in addition to preview images so we would still have the expect preview images during this time.
+                    </p>
+                    <p>
+                        The other important thing to know about thumbnails is that we generate them for each object in motion.  If your lobby camera has people continuosly walking in front of it continuosly for ten minutes, you would want to have a thumbnail for each person walking through and not just a single thumbnail for the entire 10 minute period.
+                    </p>
+                    <p>
+                        With all this explained, let's look at how we can use thumbnails to genereate a different type of time lapse video.
+                    </p>
+                    <p>
+                        This example is written in Python but the concept is the same for other languages.  We will be making HTTP calls to our 
+                         REST <a href="https://apidocs.eagleeyenetworks.com/apidocs/">API</a>, downloading the needed images, and then providing this as an input to ffmpeg.  All of these are standard processes and tools.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 1: Login and get the list of images</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+                       The first step is to login.  You'll do this through the <a href="https://apidocs.eagleeyenetworks.com/apidocs/#1-authenticate">Authenticate</a> and <a href="https://apidocs.eagleeyenetworks.com/apidocs/#3-authorize">Authorize</a> steps.
+                    </P>
+                    <p>
+                        After you have logged-in we can get the list of images. We can just grab a list of all the thumbnail images from the start of the day until the end.  I am also making sure the dates are in the EEN time format.  Start time = 20190301000000.000 and End time = 20190301235959.999 (YYYYMMDDhhmmss.nnn).
+                    </p>
+                    <p>
+                        We will be calling our <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-images">Get list of Images</a> endpoint.  This call requires that you pass tell it the camera_id, start_timestamp, end_timestamp, and asset_class.  We are going to be working with thumbnail images so the asset_class will be 'thumb'.
+                    </p>
+                    <p>
+                        Getting the list of thumbnails for this time range will give back a list of images based on the activity in front of the camera.  Depending on the camera and motion, this may be more or less images than we expected.  Our goal is still to compress this down to a maximum of a 60 second video.  In situations where there is not enough thumbnails during that time period we will shorten the length of the video. [Part 3 will show strategies so that we can always generate a 60 second video]
+                    </p>
+                        
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 2: Downloading the images</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        Before we start downloading the thumbnail images we need to look at how we will generate the time lapse.  If we show 10 thumbnail images per second of time lapse video we will only need 600 images (60 seconds * 10 frames per second).  The challenge is to figure out which 600 to show.
+                    </p>
+                    <p>
+                        If there are less than 600 thumbnails, we will need to slowdown how quickly we show each frame.  If there are more than that number we can do the same as we did with preview images in the previous post.
+                    </p>
+                    <p>
+                        To figure out which images we want, we should start with the entire list of images for the time period.  We can devide the number of images by the amount of images we are going to use.  For example, we will assume there are 10,000 thumbnails in the requested time period.  Our math becomes, 10,000 / 600 = 17.  This means we would use one frame every 17 thumbnails.  We refer to this number as the step.
+                    </p>
+                    <p>
+                        We can now go through the list of thumbnail images, getting every 17th image and saving it to your computer.  In order to keep the files straight I named them with the camera ESN and the EEN timestamp in the filename.  The EEN timestamp is handy because it can be sorted on alphabetically.
+                    </p> 
+                    <p>
+                        NOTE: The API will throttle the total number of requests per second.  It will return a HTTP status code of 429 if you're requesting too much, too quickly.
+                    </p>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 3: Generating the time lapse video</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        <a href="https://www.ffmpeg.org/">FFmpeg</a> is a terrific tool and is my Swiss-army knife for dealing with video.  It can take an input and convert it to almost any output.  In this case we are going to be passing a list of images in as the input and get a movie as the output.  FFmpeg can be very intimedating but with some reading it will start to make sense.
+                    </p>
+                    <p>
+                        ffmpeg -framerate 10 -pattern_type glob -i '*.jpg' -y -r 30 -pix_fmt yuv420p out.mp4
+                    </p>
+                    <p>
+                        This is the command we used previously.  We will be re-using most of it, but will need to add in some logic to scale the input framerate if there are less than thumbnails than we need.  We are going to do this by be dividing the number of images by the desired length of the video.  This gives us a scale factor that we can apply to the input FPS setting.  We are also rounding up because we can't show partial frames.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 4: Putting it all together</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5 offset-1">
+                    <p>
+                        On the right are three examples I've generated from my driveway.  The first video is a 60 second video showing the previews throughout a 24 hour period.  The second video is showing thumbnails during the same 24 hour period.  It is only 20 seconds because we didn't slow down the input framerate yet.  The last video is showing thumbnails and is slowed down to be 60 seconds.
+                    </p>
+                    <p>
+                        I've included the Python script I used to generate this.  It can be downloaded <a href="https://github.com/mcotton/EE-timelapse"> from Github </a>.  The example script requires a username and password to login.  A camera ESN to know which camera to use and the time range we want to get images for.
+                    </p>
+                    <p>
+                        You can run it locally or you can run it in the included Docker container.  The README file has instructions for both methods.
+                    </p>
+                </div>
+                <div class="col-4">
+                    <video controls style="width:100%;">
+                        <source src="images/1005a282-previews.mp4" type="video/mp4">
+                        <p>Your browser doesn't support HTML5 video. Here is a <a href="images/1005a282-previews.mp4">link to the video</a> instead.</p>
+                    </video>
+                    <br>
+                    <video controls style="width:100%;">
+                        <source src="images/1005a282-thumbnails-1.mp4" type="video/mp4">
+                        <p>Your browser doesn't support HTML5 video. Here is a <a href="images/1005a282-thumbnails-1.mp4">link to the video</a> instead.</p>
+                    </video>
+                    <video controls style="width:100%;">
+                        <source src="images/1005a282-thumbnails-2.mp4" type="video/mp4">
+                        <p>Your browser doesn't support HTML5 video. Here is a <a href="images/1005a282-thumbnails-2.mp4">link to the video</a> instead.</p>
+                    </video>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <p>
+                        In the next article we will look at how to highlight the activity even further.
+                    </p>
+                    <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

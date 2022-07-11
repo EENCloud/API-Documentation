@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<img id="img" src=""/>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+
+$(document).ready(function() {
+
+	$.getJSON('https://streamer.een.cloud', function(data) {
+
+		// Start with declairing the basic variables
+		account_sub_domain = data.active_brand_subdomain;
+		account_id = data.account;
+		camera_id = data.cameras[0].id
+		auth_key = data.auth_key
+
+
+		// Build the subscription string
+		data = {"cameras": {}};
+		data.cameras[camera_id] = {"resource": ["image"]}
+
+
+		// Build the WebSocket connection URL
+		connection_url = [
+			"wss://", 
+			account_sub_domain,
+			".eagleeyenetworks.com",
+			"/api/v2/Device/",
+			account_id,
+			"/Events?A=",
+			auth_key
+		].join('');
+
+
+		// make the WebSocket connection
+		socket = new WebSocket(connection_url);
+
+
+		// when the socket opens, register the subscriptions
+		socket.addEventListener('open', function(event) {
+			console.log('socket opened');
+			socket.send(JSON.stringify(data));
+		});
+
+		// for every message received, parse the data into an object and update the image on the page
+		// send an acknowledgement that you are ready for the next image
+		socket.addEventListener('message', function(event) {
+			console.log(event.data);
+			json = JSON.parse(event.data);
+			img = document.getElementById('img')
+			if(img) {
+				img.setAttribute('src', 'data:image/jpeg;base64,' + json.data[camera_id].image.image);	
+			}
+
+			socket.send('{"ack": ' + json.data[camera_id].image.epoch + '}');
+		});
+
+		// handle the close event
+		socket.addEventListener('close', function(event) {
+			console.log('socket closed')
+		});
+
+		// handle any errors
+		socket.addEventListener('error', function(event) {
+			console.log('socket error ', event);
+		});
+
+	});
+
+});
+
+</script>
+</html>

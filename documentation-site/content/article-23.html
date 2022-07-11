@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Getting Started - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Getting Started</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        Welcome to the <a href="https://apidocs.eagleeyenetworks.com/apidocs/">Eagle Eye Networks API</a>.  This API makes it simple to add video into your existing app, connect and manage security cameras, and add annotations to existing video.  There are plenty of other uses but we'll focus on these for the sake of brevity.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Example 1: Get Access to Devices</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+                       The real fun of the Eagle Eye Networks API comes from getting images and video.  You will need a user that has been given access to a camera connected to our platform.  This can be a user with a camera shared from another account, a user with a test camera provided by Eagle Eye, or it can be a user on your own system you have purchased. 
+                    </P>
+                    <p>
+                        You can get a list of devices you have access to here: <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-cameras">Get list of Cameras</a>.
+                    </p>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Example 2: Get a Preview Image</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        For every camera connect, we generate a lower resolution preview image every second (by default, can be changed).  This preview image is to provide a low-bandwidth way to casually view cameras.  In addition to the preview images, we generate a thumbnail image that is a special preview image that best represents the  motion.
+                    </p>
+                    <p>
+                        Each day, the camera should produce 86,400 preview images (60 x 60 x 24).  There will also be 1 thumbnail image per motion event.
+                    </p>
+                    <p>
+                        You can use the preview images to generate timelapses (examples <a href="/article-7.html">here</a> and <a href="/article-8.html">here</a>).
+                    </p>
+                    <p>
+                        We recomend that you display the thumbnail of an event as a target for the user to click on when they are playing video.  This gives the best representation of what will be shown in the video.
+                    </p>
+                    <p>
+                        You can get a get images from a camera by using the API endpoint documented here: <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-image">Get Image</a>.
+                    </p>
+                    
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Example 3: Play Live and Recorded Video</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        The core functionality of any VMS has to be playing video.  The Eagle Eye API makes it easy.  In fact, it treats live and recorded video as essentially the same API call.  Recorded video has a start and end timestamp, while live video uses the 'stream_' keyword as a start and offset for the ending.
+                    </p>
+                    <p>
+                        Bandwidth priority and usage are automatically managed when requesting video.  Most of the time, recorded video will already have been uploaded to the cloud.  If not, it will be prioritzed as an "on-demand" upload and be send immediately.  Live video is always streamed "on-demand".
+                    </p>
+                    <p>
+                        Live video and recorded video are send as h.264 video in a FLV container.  The FLV container always for easy wrapping the h.264 video from the RTSP stream without transcoding.  Recorded video can also be requested as MP4.  The requested video will be uploaded to the cloud, transcoded, and then delivered.  Requesting video as an MP4 does add latency and is not recommend for applications where the user is waiting to see video.
+                    </p>
+                    <p>
+                        You can get a get video from a camera by using the API endpoint documented here: <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-video">Get Video</a>.
+                    </p>
+
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Example 4: Get List of Images and Videos</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        We provide the ability to get a list of images (preview and/or thumbnails) and videos.  Using the exact timestamps provided is the fatest way to retrieve assets.  Although it is possible to slice into a video clip, using the exact start time is the more efficient.
+                    </p>
+                    <p>
+                        It is very common to get a list of thumbnail images and a list of videos.  The thumbnails allow the user to see the major object in motion while the video can be loaded.  We recommend this patern when displaying lists of recorded video.
+                    </p>
+                    <p>
+                        You can get a get a list of videos from a camera by using the API endpoint documented here: <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-videos">Get List of Videos</a>.
+                    </p>
+                    <p>
+                        You can get a get a list of images from a camera by using the API endpoint documented here: <a href="https://apidocs.eagleeyenetworks.com/apidocs/#get-list-of-images">Get List of Images</a>.
+                    </p>
+
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <p>
+                        Hopefully these examples help you get start using the Eagle Eye Networks API.  There are lots of great apps and services that could benefit from having video.
+                    </p>
+                    <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

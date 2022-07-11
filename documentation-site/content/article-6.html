@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Changing User Permissions - Eagle Eye Networks API</title>
+    <style>
+        
+        .preview_img {
+            width: 320px;
+            height: 180px;
+        }
+
+        img {
+            width: 100%;
+            border: grey solid thin;
+        }
+
+        body {
+          padding-top: 5rem;
+        }
+
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        .row {
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            border-bottom: thick linen solid;
+        }
+
+
+    </style>
+</head>
+<body>
+    <main role="main" class="container-fluid">
+        <div class="container-fluid">
+            <div class="row" id="camera_holder"></div>
+
+            <div class="row">
+                <div class="col-9 offset-1">
+                    <h1>Changing User Permissions</h1>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-9 offset-1"> 
+                    <p>
+                        One very powerful feature of our API is the ability to manage users, devices, and layouts.  It is a less obvious use for our API.  It is less obvious because we focus some much on retrieving video through our API that some of the other features can be forgetten about.
+                    </p>
+                    <p>
+                       In this example I will explain how to change user permissions in bulk.  We had a customer that needs to set a specific set of permissions for several hundred users.  Doing this manually is time consuming and error prone.  The goal was to create a script that could quickly set all the permissions.  A secondary bennefit to this, is that it can be run again in the future to ensure the permissions are still set correctly.
+                    </p>
+                    <p>
+                        The customer had all the users in an Excel file.  We needed to get the data in a data format that is easier to use.  We had the customer export the data from Excel into a new file in the CSV format.
+                    </p>
+                    <p>
+                        CSV stands for comma separated values.  It is just taking each row of the excel, listing it as line of text with a column separating each column.  Some of the fancier Excel features like pivot tables don't export very well to CSV, so make sure to check what data you are exporting.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 1: Understanding the Data</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8 offset-1">       
+                   <p>
+                       Starting with the CSV data we got from Excel, we have the email address in the first column, the user's first name in the second column, and their last name in the third column.
+                   </p>
+                   <P>
+                        The minimum data need could be just the user's email address.  This was fairly sparse, they could also add the permissions as additional columns for each user.
+                    </P>
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 2: Importing the Data</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <p>
+                        Now that we understand the data and have it as a CSV file, we want to import it.  In this case we used the CSV module in Python.  Almost every language tha has teh ability to read files can accomidate CSV files.  That's the advantage of such a simple format.
+                    </p>
+                    <p>
+                        For each for row in the CSV file, separate each item in order by breaking on the comma.  Because of the rules around excaping characters can get weird, I suggest using an existing module.
+                </div>
+                <div class="col-3"></div>
+            </div>
+
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>Step 3: Looking up Users</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 offset-1">
+                    <p>
+                        We have the user's email address as the first item in the CSV file.  Inside our code we need a way to match Eagle Eye users up with their email address.  The easiest way to do this is to get all the users for an account and then find the user with the matching email address.
+                    </p>
+                    <p>
+                        You can do this by pulling down a list of all users and then looking through the results for a matching email address.  If this is a frequent operation you should consider caching this data for future lookups.
+                    </p>
+                </div>
+                <div class="col-5">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-11 offset-1">
+                    <h2>Step 4: Setting the Permissions</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 offset-1">
+                    <p>
+                        You can see how to update a user <a href="https://apidocs.eagleeyenetworks.com/apidocs/#update-user"> here.</a>  We are going to focus on putting together the JSON data as the request's payload.
+                    </p>
+                    <p>
+                        The <a href="https://c012.eagleeyenetworks.com/help/en-us/subuser_settings_permissions.html">help file</a> does a good job of explaining the different permissions and what they do.  The user object has properties with the same names that start with 'is_'.
+                    </p>
+                    <p>
+                        The image on the left shows an example of how to construce the payload.  In this case we are giving the user all permissions except Administrator access.
+                    </p>
+                    <p>
+                        Adjust it for your situation.  Once you have the disired permissions set, you can go ahead make the request to udpate that user.
+                    <p>
+                </div>
+                <div class="col-5">
+                    <img src="images/article-6-002.png">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="ccol-11 offset-1">
+                    <h2>What else can we do with this?</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 offset-1">
+                    <p>
+                        This isn't the flashiest area of our API but it has the potential to save hours of time that would otherwise be spent manually updated users.  This can also be extended to integrate with custom roles, LDAP, or Active Directory.
+                    </p>
+                    <p>
+                        I hope you found this helpful.  If you have any questions please feel free to reach out to us at api_support@een.com
+                    </p>
+                
+                </div>
+
+            </div>
+            
+        </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>
