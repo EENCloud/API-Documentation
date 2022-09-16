@@ -68,7 +68,7 @@
 		This example shows how to automatically load and play a Eagle Eye Networks video stream through a public webpage.  There are two components needed for this demo.  There is a server componenet that securely generates the auth_token needed for the API call.  It is available <a href="https://github.com/mcotton/EE-streaming">on Github</a>. 
                 </p>
 		<p>
-		The second component is the client side JavaScript that is in this page.  This page uses our <a href="https://een.cloud/article-20.html">HTML5 Video Player</a> and the source for this page is also <a href="https://github.com/mcotton/EE-streaming/blob/master/demo-live_video.html"> on Github</a>.
+		The second component is the client side JavaScript that is in this page.  This page uses our <a href="article-20.html">HTML5 Video Player</a> and the source for this page is also <a href="https://github.com/mcotton/EE-streaming/blob/master/demo-live_video.html"> on Github</a>.
 		</p>
 		<p>
 		This page calls the server component to get the list of cameras and auth_key.  It then downloads the latest preview image use as the poster image for the video player.  It constructs the live stream URL and starts the video player.  It requests video in 90 second chunks.  When the player is within 5 seconds of the end of the video it makes another request for an additional 90 seconds.  It will continue to do this while the page is being viewed.
