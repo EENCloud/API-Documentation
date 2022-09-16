@@ -65,10 +65,10 @@
         <div class="row">
             <div class="col-9 offset-1">
                 <p>
-		This example shows how to automatically load and play a Eagle Eye Networks preview stream through a public webpage.  There are two components needed for this demo.  There is a server componenet that securely generates the auth_token needed for the API call.  It is available <a href="https://github.com/mcotton/EE-streaming">on Github</a>. 
+		This example shows how to automatically load and play a Eagle Eye Networks preview stream through a public webpage.  There are two components needed for this demo.  There is a server componenet that securely generates the auth_token needed for the API call.  It is available <a href="https://github.com/EENCloud/API-Documentation/tree/master/EE-streaming">on Github</a>. 
                 </p>
 		<p>
-		The second component is the client side JavaScript that is in this page.  This page uses the websockets that are built into modern web browsers.  The source for this page is also <a href="https://github.com/mcotton/EE-streaming/blob/master/demo-live_previews.html"> on Github</a>.
+		The second component is the client side JavaScript that is in this page.  This page uses the websockets that are built into modern web browsers.  The source for this page is also <a href="https://github.com/EENCloud/API-Documentation/tree/master/EE-streaming/blob/master/demo-live_previews.html"> on Github</a>.
 		</p>
 		<p>
 		This page calls the server component to get the list of cameras, account id, brand subdomain, and auth_key.  Once it has those values it can construct a <a href="https://apidocs.eagleeyenetworks.com/apidocs/#websocket-polling">websocket connection to our Poll Stream</a>.   The resource type will be `image`.  This will send the contents of the preview image as a base64 encoded string.  Each image will include an `epoch` value.  When you acknowledge the latest epoch value it will send the next image.
