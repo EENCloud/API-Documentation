@@ -1,5 +1,4 @@
 
 FROM nginx:stable
 
-COPY ./nginx.conf.simple /etc/nginx/conf.d/default.conf
-
+COPY ./content /usr/share/nginx/html
