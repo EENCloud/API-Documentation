@@ -1,5 +1,7 @@
 ## Eagle Eye Networks API documentation
 
+Public repository with examples and guidelines on how to interact with the Eagle Eye Networks platform through the open API.
+
 [Eagle Eye Networks API Examples](./EE-API-examples)
 
 [EE-blinker for Eagle Eye Networks Poll Stream](./EE-blinker)
